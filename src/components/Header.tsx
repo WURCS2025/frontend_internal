@@ -15,7 +15,7 @@ const Header: React.FC = () => {
 
           <h1 className="usa-logo text-no-wrap text-bold">
             <a href="https://www.stb.gov" title="Home" aria-label="Home">
-              WRUCS File Upload Portal
+              WURCS File Upload Portal
             </a>
           </h1>
         </div>

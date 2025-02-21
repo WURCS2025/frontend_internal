@@ -42,7 +42,7 @@
 }
 
 .grid-container {
-  background-color: #e0f7fa;
+  background-color: grey;
   min-height: 100vh; /* Ensures it covers the full screen */
   padding: 20px;
 }
