@@ -1,0 +1,27 @@
+/* Ensures the header background matches USWDS primary color */
+.custom-header {
+  background-color: #44546a;
+  padding: 10px 20px;
+}
+
+/* Ensures the logo and text are on the same line */
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between logo and text */
+}
+
+/* Adjust logo size */
+.header-logo {
+  height: 80px;
+  width: auto;
+}
+
+/* Ensures the text does not wrap */
+.usa-logo a {
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
+}
