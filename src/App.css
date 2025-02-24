@@ -41,8 +41,26 @@
   color: #888;
 }
 
-.grid-container {
+.grid-container2 {
   background-color: grey;
   min-height: 100vh; /* Ensures it covers the full screen */
   padding: 20px;
+  width: 100vw;
+  max-width: 1280px;
+  
 }
+
+.content-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+.one-grid-container {
+  display: grid;
+  grid-template-rows: auto 1fr; /* Header takes natural height, content fills remaining space */
+  height: 100vh; /* Full viewport height */
+  width: 100%; /* Full width */
+  max-width: 1080px; /* Optional: limit max width */
+}
+
+

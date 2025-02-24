@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../stores/authStore";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -20,8 +20,10 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="grid-container usa-prose">
+    <div className="grid-container2">
+      
       <h2>Login</h2>
+      
       {error && <p className="usa-alert usa-alert--error">{error}</p>}
       <form className="usa-form" onSubmit={handleLogin}>
         <label className="usa-label" htmlFor="username">Username</label>

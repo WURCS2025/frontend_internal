@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface AuthState {
-  user: string | null;
+  userLogin: string | null;
   token: string | null;
   expiration: number | null; // Expiration timestamp
   login: (username: string, password: string) => Promise<boolean>;
@@ -10,7 +10,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: localStorage.getItem("user"),
+  userLogin: localStorage.getItem("user"),
   token: localStorage.getItem("token"),
   expiration: localStorage.getItem("expiration")
     ? parseInt(localStorage.getItem("expiration") || "0", 10)
@@ -27,9 +27,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       // if (!response.ok) return false;
 
       // const data = await response.json();
-      const expiration = Date.now() + 30 * 60 * 1000; // 30 minutes expiration
+      const sessionLength = 1; // Default to 30 if undefined
+      const expiration = Date.now() + sessionLength * 60 * 1000; // 30 minutes expiration
+      const data = {
+        token: password
+      }
 
-      set({ user: username, token: data.token, expiration });
+      set({ userLogin: username, token: data.token, expiration });
 
       localStorage.setItem("user", username);
       localStorage.setItem("token", data.token);
@@ -43,7 +47,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    set({ user: null, token: null, expiration: null });
+    set({ userLogin: null, token: null, expiration: null });
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
@@ -52,7 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   checkSession: () => {
     const expiration = localStorage.getItem("expiration");
     if (expiration && Date.now() > parseInt(expiration, 10)) {
-      set({ user: null, token: null, expiration: null });
+      set({ userLogin: null, token: null, expiration: null });
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       localStorage.removeItem("expiration");

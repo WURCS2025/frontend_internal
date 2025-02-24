@@ -1,5 +1,7 @@
-import React, { useState, useRef } from "react";
-import { useUploadStore } from "../store";
+import React, { useState, useRef, useEffect } from "react";
+import { useUploadStore } from "../stores/uploadStore";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../stores/authStore";
 import { TYPE_OPTIONS, YEAR_OPTIONS, CATEGORY_OPTIONS } from "../constants";
 
 const UploadForm: React.FC = () => {
@@ -11,6 +13,22 @@ const UploadForm: React.FC = () => {
 
   const portnumber = 55733;
   const uploadurl = `https://localhost:${portnumber}/api/S3File/upload`;
+
+  const navigate = useNavigate();
+  const { userLogin, checkSession } = useAuthStore();
+
+  useEffect(() => {
+    checkSession(); // Check session on mount
+
+    const interval = setInterval(() => {
+      checkSession();
+      if (!localStorage.getItem("user")) {
+        navigate("/login");
+      }
+    }, 10000); // Check every 10 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [userLogin, navigate, checkSession]);
 
   // 📌 Handle File Selection (Browse)
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

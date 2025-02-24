@@ -5,7 +5,7 @@ import './Header.css'; // Import custom styles
 
 const Header: React.FC = () => {
   return (
-    <header className="usa-header usa-header--extended custom-header">
+    <div className="usa-header">
       <div className="usa-navbar">
         {/* Logo & Title Wrapper */}
         <div className="header-content">
@@ -20,7 +20,7 @@ const Header: React.FC = () => {
           </h1>
         </div>
       </div>
-    </header>
+    </div>
   );
 };
 
