@@ -4,8 +4,6 @@ import App from './App.tsx';
 import "/node_modules/@uswds/uswds/dist/css/uswds.min.css";
 // import './index.scss'; // Import the SCSS file
 
-import './index.css';
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
