@@ -6,7 +6,6 @@ import './Header.css'; // Import custom styles
 const Header: React.FC = () => {
   return (
     <div className="usa-header">
-      <div className="usa-navbar">
         {/* Logo & Title Wrapper */}
         <div className="header-content">
           <a href="https://www.stb.gov" title="Home" aria-label="Home" className="header-logo-link">
@@ -19,7 +18,6 @@ const Header: React.FC = () => {
             </a>
           </h1>
         </div>
-      </div>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
+import { useUploadStore } from "../stores/uploadstore";
+import { Header } from "./Header";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +15,8 @@ const Login: React.FC = () => {
     e.preventDefault();
     const success = await login(username, password);
     if (success) {
-      navigate("/upload");
+
+      navigate("/status");
     } else {
       setError("Invalid username or password");
     }
@@ -21,6 +24,8 @@ const Login: React.FC = () => {
 
   return (
     <div className="grid-container2">
+      
+          
       
       <h2>Login</h2>
       

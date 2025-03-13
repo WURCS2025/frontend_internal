@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useUploadStore } from "../stores/uploadStore";
+import { useUploadStore } from "../stores/uploadstore";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
 import { TYPE_OPTIONS, YEAR_OPTIONS, CATEGORY_OPTIONS } from "../constants";
@@ -8,6 +8,7 @@ const UploadForm: React.FC = () => {
   const { file, type, year, category, user, setFile, setType, setYear, setCategory, setUser } = useUploadStore();
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [username, setUsername] = useState<string>(""); // ✅ Store username
   const [fileName, setFileName] = useState<string>("No file selected"); // ✅ Store file name
   const fileInputRef = useRef<HTMLInputElement>(null); // Reference to trigger file input
 
@@ -18,6 +19,10 @@ const UploadForm: React.FC = () => {
   const { userLogin, checkSession } = useAuthStore();
 
   useEffect(() => {
+
+    if (userLogin) {
+      setUser(userLogin); // ✅ Set username from userLogin
+    }
     checkSession(); // Check session on mount
 
     const interval = setInterval(() => {
@@ -174,8 +179,8 @@ const UploadForm: React.FC = () => {
         </select>
 
         {/* 📌 User Name */}
-        <label className="usa-label" htmlFor="user">User Name:</label>
-        <input className="usa-input" type="text" id="user" value={user} onChange={(e) => setUser(e.target.value)} required />
+        {/* <label className="usa-label" htmlFor="user">User Name:</label> */}
+        <input className="usa-input" type="hidden" id="user" value={user} onChange={(e) => setUser(e.target.value)} required />
 
         {/* 📌 Submit Button */}
         <button className="usa-button" type="submit">Upload</button>
