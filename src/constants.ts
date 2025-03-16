@@ -28,3 +28,4 @@ export const UPLOAD_URL = `${API_URL}/S3File/upload`;
 export const DOWNLOAD_URL = `${API_URL}/S3File/download`;
 export const FILE_STATUS_URL = `${API_URL}/S3File/filter`;
 export const LOGIN_URL = `${API_URL}/auth/login`; 
+export const SESSION_LENGTH = 30; // Session length in minutes

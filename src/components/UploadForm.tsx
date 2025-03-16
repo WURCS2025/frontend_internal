@@ -83,7 +83,7 @@ const UploadForm: React.FC = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", file.name);
-    formData.append("type", type);
+    formData.append("filetype", type);
     formData.append("year", year);
     formData.append("category", category);
     formData.append("userInfo", user);

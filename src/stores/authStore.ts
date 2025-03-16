@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { LOGIN_URL } from "../constants";
+import { LOGIN_URL, SESSION_LENGTH } from "../constants";
 
 interface AuthState {
   userLogin: string | null;
@@ -28,8 +28,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (!response.ok) return false;
 
       // const data = await response.json();
-      const sessionLength = 1; // Default to 30 if undefined
-      const expiration = Date.now() + sessionLength * 60 * 1000; // 30 minutes expiration
+      const expiration = Date.now() + SESSION_LENGTH * 60 * 1000; // 30 minutes expiration
       const data = {
         token: password
       }
