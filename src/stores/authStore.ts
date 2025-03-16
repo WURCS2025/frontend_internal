@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { LOGIN_URL } from "../constants";
 
 interface AuthState {
   userLogin: string | null;
@@ -18,13 +19,13 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (username, password) => {
     try {
-      // const response = await fetch("https://localhost:55733/api/auth/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ username, password }),
-      // });
+      const response = await fetch(`${LOGIN_URL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // if (!response.ok) return false;
+      if (!response.ok) return false;
 
       // const data = await response.json();
       const sessionLength = 1; // Default to 30 if undefined

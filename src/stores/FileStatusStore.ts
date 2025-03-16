@@ -4,30 +4,57 @@ import { FILE_STATUS_URL } from "../constants";
 
 interface FileStatusState {
   files: FileStatus[];
-  fetchFiles: () => Promise<void>;
-  sortBy: (key: keyof FileStatus) => void;
+  fetchFiles: (filters: any, sortField: string, sortOrder: string) => Promise<void>;
 }
 
 export const useFileStatusStore = create<FileStatusState>((set) => ({
   files: [],
 
-  fetchFiles: async () => {
+  fetchFiles: async (filters, sortField, sortOrder) => {
     try {
-      const response = await fetch(`${FILE_STATUS_URL}/${localStorage.getItem("user")}`);
-      const data: FileStatus[] = await response.json();
-      set({ files: data });
-    } catch (error) {
-      console.error("Error fetching file status:", error);
-    }
-  },
+      var body = JSON.stringify({
+        userid: filters.userid,
+        category: filters.category,
+        year: filters.year,
+        type: filters.type,
+        status: filters.status,
+        sortField: sortField || 'uploaddate',
+        sortOrder: sortOrder || 'desc', // Default to 'desc' if not provided
+      });
+      const response = await fetch(`${FILE_STATUS_URL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userid: filters.userid,
+          category: filters.category,
+          year: filters.year,
+          filetype: filters.filetype,
+          status: filters.status,
+          sortField,
+          sortOrder,
+        }),
+      });
 
-  sortBy: (key) => {
-    set((state) => ({
-      files: [...state.files].sort((a, b) => {
-        if (a[key] < b[key]) return -1;
-        if (a[key] > b[key]) return 1;
-        return 0;
-      }),
-    }));
+      if (!response.ok) {
+        console.error("Failed to fetch data:", response.statusText);
+        console.error("Response status:", response.status);
+        console.error("Response headers:", response.headers);
+        console.error("Request body:", body);
+        throw new Error("Failed to fetch data");
+      }
+
+      console.log("fetch data success:", response.statusText);
+      console.log("Success Response status:", response.status);
+      console.log("Success Response headers:", response.headers);
+      console.log("Success Request body:", body);
+      const data: FileStatus[] = await response.json();
+      set({ files: Array.isArray(data) ? data : [] });
+    } catch (error) {
+      
+      console.error("Catch Error fetching file status:", error);
+      set({ files: [] });
+    }
   },
 }));

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useUploadStore } from "../stores/uploadstore";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
+import { UPLOAD_URL } from "../constants";
 import { TYPE_OPTIONS, YEAR_OPTIONS, CATEGORY_OPTIONS } from "../constants";
 
 const UploadForm: React.FC = () => {
@@ -11,9 +12,8 @@ const UploadForm: React.FC = () => {
   const [username, setUsername] = useState<string>(""); // ✅ Store username
   const [fileName, setFileName] = useState<string>("No file selected"); // ✅ Store file name
   const fileInputRef = useRef<HTMLInputElement>(null); // Reference to trigger file input
-
-  const portnumber = 55733;
-  const uploadurl = `https://localhost:${portnumber}/api/S3File/upload`;
+  
+  const uploadurl = `${UPLOAD_URL}`; // Use the constant for the upload URL
 
   const navigate = useNavigate();
   const { userLogin, checkSession } = useAuthStore();

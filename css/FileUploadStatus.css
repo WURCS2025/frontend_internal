@@ -1,0 +1,39 @@
+.form-row-inline {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.record-count {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+
+.form-row {
+  display: flex;
+  gap: 10px; /* Space between selects */
+  align-items: center;
+  flex-wrap: wrap; /* Wrap on smaller screens */
+}
+
+/* Each select and label pair */
+.form-group {
+  display: flex;
+  align-items: center;
+}
+
+/* Consistent spacing between label and select */
+.form-label {
+  margin-right: 8px;
+  min-width: 70px;
+  font-weight: bold;
+}
+
+/* Styling for select elements */
+.form-select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 150px;
+}

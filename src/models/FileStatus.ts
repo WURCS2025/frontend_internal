@@ -1,8 +1,12 @@
 export interface FileStatus {
-  fileId: string;
-  fileStatus: string;
-  userId: string;
+  id: string;
+  filename: string;
+  userinfo: string;
+  type: string;
   fileMetaData: string;
-  fileYear: number;
-  fileType: string;
+  year: number;
+  category: string;
+  uploaddate: string;
+  s3_Key: string;
+  status: string;
 }
