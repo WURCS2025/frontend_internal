@@ -8,3 +8,7 @@ export const convertTimeFormat = (date: string): string => {
     hour12: false // Use 24-hour format; remove or set to true for 12-hour format
   })
 };
+
+export const toBoolean = (value: string | null | undefined): boolean => {
+  return value?.toLowerCase() === "true";
+};

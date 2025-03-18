@@ -2,13 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import UploadForm from "./components/UploadForm";
-import Login from "./components/Login";
-import Sidebar from "./components/Sidebar";
-import UploadStatus from "./components/FileUploadStatus";
-
+import UserLogin from "./components/user/UserLogin";
+import UserSideBar from "./components/user/UserSidebar";
+import UserUploadStatus from "./components/user/UserUploadStatus";
+import ProtectedRoute from "./components/user/ProtectedRoute";
 import "/node_modules/@uswds/uswds/dist/css/uswds.min.css";
+import { UserProfile } from "./components/user/UserProfile";
+import AdminLogin from "./components/admin/AdminLogin";
 import "./App.css";
-import { API_URL, API_URL_ROOT } from "./constants";
 
 const App: React.FC = () => {
 
@@ -17,7 +18,7 @@ const App: React.FC = () => {
     <Router>
       <div className="app-layout">
         <div className="sidebar">
-          <Sidebar />
+          <UserSideBar />
         </div>
 
         <main className="main-content">
@@ -27,10 +28,14 @@ const App: React.FC = () => {
 
           <div className="content-body">
             <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/upload" element={<UploadForm />} />
-              <Route path="/status" element={<UploadStatus />} />
-              <Route path="*" element={<Login />} />
+              <Route path="/login" element={<UserLogin />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/upload" element={<UploadForm />} />
+                <Route path="/status" element={<UserUploadStatus />} />
+                <Route path="/profile" element={<UserProfile />} />
+              </Route>
+              <Route path="*" element={<UserLogin />} />
+              <Route path="/admin" element={<AdminLogin />} />
             </Routes>
           </div>
         </main>

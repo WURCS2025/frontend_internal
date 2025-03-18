@@ -39,3 +39,47 @@
   width: 100%;
   max-width: 1280px;
 }
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-logo {
+  height: 60px;
+}
+
+.header-title-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.header-title:hover {
+  text-decoration: underline;
+}
+
+.header-links {
+  margin-top: 5px;
+  display: flex;
+  gap: 20px; /* Spacing between the links */
+}
+
+.header-link {
+  font-size: 0.875rem;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.header-link:hover {
+  text-decoration: underline;
+  color: #e1e1e1;
+}
+

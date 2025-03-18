@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useFileStatusStore } from "../stores/FileStatusStore";
-import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../constants";
-import { useAuthStore } from "../stores/authStore";
-import { convertTimeFormat } from "../utility/TimeFormat";
-import '../../css/FileUploadStatus.css';
+import { useFileStatusStore } from "../../stores/FileStatusStore";
+import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../../constants";
+import { useAuthStore } from "../../stores/authStore";
+import { convertTimeFormat } from "../../utility/Utility";
+import '../../../css/FileUploadStatus.css';
 
-const UploadStatus: React.FC = () => {
+const UserUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
 
@@ -115,4 +115,4 @@ const UploadStatus: React.FC = () => {
   );
 };
 
-export default UploadStatus;
+export default UserUploadStatus;

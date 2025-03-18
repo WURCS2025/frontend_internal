@@ -1,0 +1,31 @@
+.admin-container, .user-container {
+  display: flex;
+  height: 100vh;
+}
+
+.admin-content, .user-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.sidebar {
+  width: 220px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  height: 100vh;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}

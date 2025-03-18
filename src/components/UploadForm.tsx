@@ -9,7 +9,6 @@ const UploadForm: React.FC = () => {
   const { file, type, year, category, user, setFile, setType, setYear, setCategory, setUser } = useUploadStore();
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
-  const [username, setUsername] = useState<string>(""); // ✅ Store username
   const [fileName, setFileName] = useState<string>("No file selected"); // ✅ Store file name
   const fileInputRef = useRef<HTMLInputElement>(null); // Reference to trigger file input
   
@@ -71,12 +70,30 @@ const UploadForm: React.FC = () => {
     }
   };
 
+  const resetForm = () => {
+    setFile(null);
+    setFileName("No file selected");
+  };
+
   // 📌 Handle File Upload
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (!file) {
       setUploadStatus("❌ Please select a file to upload.");
+      return;
+    }
+  
+    if (!type) {
+      setUploadStatus("❌ Please select a file type.");
+      return;
+    }
+    if (!year) {
+      setUploadStatus("❌ Please select a year.");
+      return;
+    }
+    if (!category) {
+      setUploadStatus("❌ Please select a category.");
       return;
     }
 
@@ -97,6 +114,7 @@ const UploadForm: React.FC = () => {
 
       if (response.ok) {
         setUploadStatus("✅ File uploaded successfully!");
+        resetForm(); // Reset form after successful upload
       } else {
         setUploadStatus("❌ Failed to upload file. Please try again.");
       }

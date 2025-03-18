@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import { LOGIN_URL, SESSION_LENGTH } from "../constants";
+import { toBoolean } from "../utility/Utility";
 
 interface AuthState {
   userLogin: string | null;
   token: string | null;
+  userrole: string | null;
   expiration: number | null; // Expiration timestamp
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string, userrole: string) => Promise<boolean>;
   logout: () => void;
   checkSession: () => void;
 }
@@ -13,16 +15,17 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   userLogin: localStorage.getItem("user"),
   token: localStorage.getItem("token"),
+  userrole: localStorage.getItem("isAdmin"),
   expiration: localStorage.getItem("expiration")
     ? parseInt(localStorage.getItem("expiration") || "0", 10)
     : null,
 
-  login: async (username, password) => {
+  login: async (username: string, password: string, userrole: string) => {
     try {
       const response = await fetch(`${LOGIN_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, userrole }),
       });
 
       if (!response.ok) return false;
@@ -33,7 +36,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         token: password
       }
 
-      set({ userLogin: username, token: data.token, expiration });
+      set({ userLogin: username, token: data.token, expiration, userrole });
 
       localStorage.setItem("user", username);
       localStorage.setItem("token", data.token);

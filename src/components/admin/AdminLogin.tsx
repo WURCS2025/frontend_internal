@@ -1,10 +1,9 @@
+// AdminLogin.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../stores/authStore";
-import { useUploadStore } from "../stores/uploadstore";
-import { Header } from "./Header";
+import { useAuthStore } from "../../stores/authStore";
 
-const Login: React.FC = () => {
+const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [username, setUsername] = useState("");
@@ -13,25 +12,24 @@ const Login: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login(username, password);
+    const userrole = 'admin';
+    const success = await login(username, password, userrole);
     if (success) {
-
-      navigate("/status");
+      navigate("/admin/upload-status");
     } else {
-      setError("Invalid username or password");
+      setError("Invalid admin username or password");
     }
   };
 
   return (
-    <div className="grid-container2">
-      
+    <div className="grid-container2">    
           
       
-      <h2>Login</h2>
+      <h2>Admin Login</h2>
       
       {error && <p className="usa-alert usa-alert--error">{error}</p>}
       <form className="usa-form" onSubmit={handleLogin}>
-        <label className="usa-label" htmlFor="username">Username</label>
+        <label className="usa-label" htmlFor="Admin Username">Admin Username</label>
         <input
           className="usa-input"
           type="text"
@@ -41,7 +39,7 @@ const Login: React.FC = () => {
           required
         />
 
-        <label className="usa-label" htmlFor="password">Password</label>
+        <label className="usa-label" htmlFor="password">Admin Password</label>
         <input
           className="usa-input"
           type="password"
@@ -57,4 +55,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;
