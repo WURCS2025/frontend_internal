@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { LOGIN_URL, SESSION_LENGTH } from "../constants";
-import { toBoolean } from "../utility/Utility";
+
 
 interface AuthState {
   userLogin: string | null;
@@ -41,10 +41,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("user", username);
       localStorage.setItem("token", data.token);
       localStorage.setItem("expiration", expiration.toString());
+      localStorage.setItem("userrole", userrole);
 
       return true;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error for `${userrole}`:", error);
       return false;
     }
   },
@@ -54,6 +55,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
+    localStorage.removeItem("userrole");
   },
 
   checkSession: () => {
@@ -63,6 +65,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       localStorage.removeItem("expiration");
+      localStorage.removeItem("userrole");
     }
   },
 }));

@@ -1,7 +1,7 @@
-import React from "react";
+
 import { Routes, Route } from "react-router-dom";
 import UserLayout from "../layouts/UserLayout";
-import UserDashboard from "../components/user/UserDashboard";
+import UserUploadStatus  from "../components/user/UserUploadStatus";
 import UserUpload from "../components/user/UserUpload";
 import UserLogin from "../components/user/UserLogin";
 
@@ -10,7 +10,7 @@ const UserRoutes = () => {
     <UserLayout>
       <Routes>
         <Route path="/user/login" element={<UserLogin />} />
-        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/user/dashboard" element={<UserUploadStatus />} />
         <Route path="/user/upload" element={<UserUpload />} />
       </Routes>
     </UserLayout>

@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useUploadStore } from "../stores/uploadstore";
+import { useUploadStore } from "../../stores/uploadstore";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../stores/authStore";
-import { UPLOAD_URL } from "../constants";
-import { TYPE_OPTIONS, YEAR_OPTIONS, CATEGORY_OPTIONS } from "../constants";
+import { useAuthStore } from "../../stores/authStore";
+import { UPLOAD_URL } from "../../constants";
+import { TYPE_OPTIONS, YEAR_OPTIONS, CATEGORY_OPTIONS } from "../../constants";
 
-const UploadForm: React.FC = () => {
+const UserUpload: React.FC = () => {
   const { file, type, year, category, user, setFile, setType, setYear, setCategory, setUser } = useUploadStore();
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -207,4 +207,4 @@ const UploadForm: React.FC = () => {
   );
 };
 
-export default UploadForm;
+export default UserUpload;
