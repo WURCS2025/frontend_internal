@@ -24,15 +24,19 @@ const AdminSideBar: React.FC = () => {
 
       {/* Navigation Links without <ul> or <li> */}
       <div className="usa-sidenav-list">
-        <NavLink to="/upload" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        <NavLink to="/admin/upload" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           File Upload
         </NavLink>
 
-        <NavLink to="/status" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        <NavLink to="/admin/status" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           Dashboard
         </NavLink>
 
-        <NavLink to="/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        <NavLink to="/admin/users" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+          Profile
+        </NavLink>
+
+        <NavLink to="/admin/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           Profile
         </NavLink>
 

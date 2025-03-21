@@ -37,7 +37,7 @@ const AdminUploadStatus: React.FC = () => {
 
   return (
     <div className="grid-container usa-prose">
-      <h2>Upload Status Dashboard</h2>
+      <h2>Admin Upload Status Dashboard</h2>
 
       <div className="form-row-inline">
         <div className="form-group">

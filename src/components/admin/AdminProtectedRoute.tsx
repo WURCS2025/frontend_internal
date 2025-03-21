@@ -6,7 +6,7 @@ const AdminProtectedRoute: React.FC = () => {
   const { userLogin } = useAuthStore();
 
   // Check if the user is logged in
-  if (!userLogin || !localStorage.getItem("user")) {
+  if (!userLogin || !localStorage.getItem("user") || !localStorage.getItem("admin")) {
     return <Navigate to="/admin/login" replace />;
   }
 

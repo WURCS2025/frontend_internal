@@ -10,11 +10,11 @@ const AdminRoutes = () => {
   return (
     <AdminLayout>
       <Routes>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/upload" element={<UserUpload />} />
-        <Route path="/admin/dashboard" element={<AdminUploadStatus />} />
-        <Route path="/admin/users" element={<AdminUserManagement />} />
-        
+        <Route path="/login" element={<AdminLogin />} />
+        <Route path="/upload" element={<UserUpload />} />
+        <Route path="/status" element={<AdminUploadStatus />} />
+        <Route path="/users" element={<AdminUserManagement />} />  
+        <Route path="*" element={<AdminLogin />} />
       </Routes>
     </AdminLayout>
   );

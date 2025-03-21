@@ -21,11 +21,8 @@ const UserLogin: React.FC = () => {
   };
 
   return (
-    <div className="grid-container2">
-      
-          
-      
-      <h2>Login</h2>
+    <div className="grid-container usa-prose">
+      <h2>User Login</h2>
       
       {error && <p className="usa-alert usa-alert--error">{error}</p>}
       <form className="usa-form" onSubmit={handleLogin}>

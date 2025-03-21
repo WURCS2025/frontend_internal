@@ -22,7 +22,7 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="grid-container2">    
+    <div className="grid-container usa-prose">   
           
       
       <h2>Admin Login</h2>
