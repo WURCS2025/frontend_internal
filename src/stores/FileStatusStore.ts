@@ -45,11 +45,12 @@ export const useFileStatusStore = create<FileStatusState>((set) => ({
         throw new Error("Failed to fetch data");
       }
 
-      console.log("fetch data success:", response.statusText);
+      console.log("fetch data success:", response.json);
       console.log("Success Response status:", response.status);
       console.log("Success Response headers:", response.headers);
       console.log("Success Request body:", body);
       const data: FileStatus[] = await response.json();
+      console.log("Success Response data:", data);
       set({ files: Array.isArray(data) ? data : [] });
     } catch (error) {
       

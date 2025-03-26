@@ -15,7 +15,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   userLogin: localStorage.getItem("user"),
   token: localStorage.getItem("token"),
-  userrole: localStorage.getItem("isAdmin"),
+  userrole: localStorage.getItem("userrole"),
   expiration: localStorage.getItem("expiration")
     ? parseInt(localStorage.getItem("expiration") || "0", 10)
     : null,

@@ -103,7 +103,7 @@ const UserUploadStatus: React.FC = () => {
               <td>{file.category}</td>
               <td>{file.status}</td>
               <td>{file.userinfo}</td>
-              <td>{convertTimeFormat(file.uploaddate)}</td>
+              <td>{convertTimeFormat(file.uploaddate)} (LT)</td>
               <td>
                 <button onClick={() => handleDownload(file.id)}>Download</button>
               </td>

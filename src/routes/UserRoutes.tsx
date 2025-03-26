@@ -6,6 +6,7 @@ import UserUpload from "../components/user/UserUpload";
 import UserLogin from "../components/user/UserLogin";
 import UserProtectedRoute from "../components/user/UserProtectedRoute";
 import { UserProfile } from "../components/user/UserProfile";
+import HelpComponent from "../components/common/HelpComponent";
 
 const UserRoutes = () => {
   return (
@@ -20,6 +21,8 @@ const UserRoutes = () => {
           <Route path="/profile" element={<UserProfile />} />
         </Route>
         <Route path="*" element={<UserLogin />} />
+        
+        <Route path='/help' element={<HelpComponent />} />
       </Routes>
     </UserLayout>
   );

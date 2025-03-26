@@ -3,12 +3,16 @@ import { useFileStatusStore } from "../../stores/FileStatusStore";
 import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../../constants";
 import { useAuthStore } from "../../stores/authStore";
 import { convertTimeFormat } from "../../utility/Utility";
+import { USER_LIST_URL } from "../../constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+
 import '../../../css/FileUploadStatus.css';
 
 const AdminUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
-
+  const [userList, setUserList] = useState<{ id: string, username: string }[]>([]);
   const [sortField, setSortField] = useState<string>("uploaddate");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filters, setFilters] = useState({
@@ -20,12 +24,27 @@ const AdminUploadStatus: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchFiles({ userid: userLogin }, sortField, sortOrder);
+    fetchFiles({ userid: 'admin' }, sortField, sortOrder);
   }, []);
 
   useEffect(() => {
     fetchFiles(filters, sortField, sortOrder);
   }, [userLogin, filters, sortField, sortOrder]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${USER_LIST_URL}/userlist?username=${localStorage.getItem("user")}`); // Replace with your actual API route
+        console.log("fetchUsers response:", response);
+        const data = await response.json();
+        setUserList(data); // Assuming the data is an array of { id, name }
+      } catch (error) {
+        console.error("Failed to fetch users", error);
+      }
+    };
+  
+    fetchUsers();
+  }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -35,11 +54,44 @@ const AdminUploadStatus: React.FC = () => {
     window.open(`${DOWNLOAD_URL}?fileId=${fileId}`, '_blank');
   };
 
+  const handleDelete = (fileId: string) => {
+    console.log("Delete file", fileId);
+    // Implement delete logic
+  };
+  
+  const handlePushData = (fileId: string) => {
+    console.log("Push data for", fileId);
+    // Implement push logic
+  };
+  
+  const handleComment = (fileId: string) => {
+    console.log("Comment on", fileId);
+    // Implement comment logic
+  };
+
   return (
     <div className="grid-container usa-prose">
       <h2>Admin Upload Status Dashboard</h2>
 
+      
       <div className="form-row-inline">
+        <div className="form-group">
+          <label htmlFor="user-select" className="form-label">User:</label>
+          <select
+            id="user-select"
+            name="userid"
+            onChange={handleFilterChange}
+            className="form-select"
+            value={filters.userid}
+          >
+            <option value="">All</option>
+            {userList.map((user) => (
+              <option key={user.username} value={user.username}>
+                {user.username}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="form-group">
           <label htmlFor="year-select" className="form-label">Year:</label>
           <select id="year-select" name="year" onChange={handleFilterChange} className="form-select">
@@ -103,10 +155,21 @@ const AdminUploadStatus: React.FC = () => {
               <td>{file.category}</td>
               <td>{file.status}</td>
               <td>{file.userinfo}</td>
-              <td>{convertTimeFormat(file.uploaddate)}</td>
+              <td>{convertTimeFormat(file.uploaddate)}  (LT)</td>
               <td>
-                <button onClick={() => handleDownload(file.id)}>Download</button>
-              </td>
+  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDownload(file.id)} title="Download File">
+    <FontAwesomeIcon icon={faDownload} />
+  </button>
+  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file.id)} title="Delete File">
+    <FontAwesomeIcon icon={faTrash} />
+  </button>
+  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handlePushData(file.id)} title="Push Data">
+    <FontAwesomeIcon icon={faPaperPlane} />
+  </button>
+  <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
+    <FontAwesomeIcon icon={faCommentDots} />
+  </button>
+</td>
             </tr>
           ))}
         </tbody>

@@ -1,0 +1,44 @@
+/* Custom modal wrapper for top-right positioning */
+.custom-top-right-modal {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  bottom: auto;
+  left: auto;
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  background: none; /* remove default modal overlay */
+}
+
+/* Custom modal box */
+.custom-modal-box {
+  width: 320px;
+  border: 2px solid #1b1b1b;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 0.5rem;
+  background: white;
+  padding: 1rem;
+}
+
+/* Fix content order in modal */
+.usa-modal__content {
+  padding-top: 0.5rem; /* reduce top padding */
+  display: flex;
+  flex-direction: column; /* Correct top-down order */
+}
+
+.custom-modal-right-of-table {
+  position: fixed; /* changed from absolute to fixed for screen centering */
+  top: 10%;         /* or adjust as needed */
+  left: 72%;        /* center horizontally */
+  transform: translateX(-50%); /* shift left by half of its own width */
+  z-index: 9999;
+  background: none;
+  display: block;
+}
+
+
+
+

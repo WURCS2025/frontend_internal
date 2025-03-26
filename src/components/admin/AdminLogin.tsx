@@ -15,7 +15,7 @@ const AdminLogin: React.FC = () => {
     const userrole = 'admin';
     const success = await login(username, password, userrole);
     if (success) {
-      navigate("/admin/upload-status");
+      navigate("/admin/status");
     } else {
       setError("Invalid admin username or password");
     }
