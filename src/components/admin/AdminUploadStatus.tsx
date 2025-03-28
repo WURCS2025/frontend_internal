@@ -3,7 +3,9 @@ import { useFileStatusStore } from "../../stores/FileStatusStore";
 import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../../constants";
 import { useAuthStore } from "../../stores/authStore";
 import { convertTimeFormat } from "../../utility/Utility";
-import { USER_LIST_URL } from "../../constants";
+import { USER_LIST_URL, DELETE_FILE_URL } from "../../constants";
+import { useConfirmation } from "../common/BooleanConfirmationHook";
+import { FileStatus } from "../../models/FileStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,6 +14,7 @@ import '../../../css/FileUploadStatus.css';
 const AdminUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
+  const { confirm, Confirmation } = useConfirmation();
   const [userList, setUserList] = useState<{ id: string, username: string }[]>([]);
   const [sortField, setSortField] = useState<string>("uploaddate");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -54,9 +57,46 @@ const AdminUploadStatus: React.FC = () => {
     window.open(`${DOWNLOAD_URL}?fileId=${fileId}`, '_blank');
   };
 
-  const handleDelete = (fileId: string) => {
-    console.log("Delete file", fileId);
-    // Implement delete logic
+const handleDelete = async (file: FileStatus) => {
+    
+    const confirmed = await confirm({
+      title: "Confirm File Deletion",
+      description: `Are you sure you want to delete file "${file.filename}"?`,
+      confirmLabel: "Yes, delete",
+      cancelLabel: "Cancel"
+    });
+
+    if (!confirmed) return;
+  
+    try {
+      const response = await fetch(`${DELETE_FILE_URL}/${file.id}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        const errorConfirm = await confirm({
+        title: "File Deletion Failed",
+        description: `Failed to delete file ${file.filename}`,
+        confirmLabel: "Ok"
+      });
+        return;
+      }
+  
+      const fileDeletedConfirmed = await confirm({
+        title: "File Deleted Successfully",
+        description: `File "${file.filename}" has been deleted successfully.`,
+        confirmLabel: "Ok",
+        cancelLabel: ""
+      });
+      fetchFiles(filters, sortField, sortOrder); // Refresh list
+    } catch (error) {
+      const errorConfirm = await confirm({
+        title: "File Deletion Failed",
+        description: `Failed to delete file ${file.filename}, Error: ${error}`,
+        confirmLabel: "Ok"
+      });
+      console.error("Delete error:", error);
+    }
   };
   
   const handlePushData = (fileId: string) => {
@@ -73,7 +113,7 @@ const AdminUploadStatus: React.FC = () => {
     <div className="grid-container usa-prose">
       <h2>Admin Upload Status Dashboard</h2>
 
-      
+      {Confirmation}
       <div className="form-row-inline">
         <div className="form-group">
           <label htmlFor="user-select" className="form-label">User:</label>
@@ -156,11 +196,11 @@ const AdminUploadStatus: React.FC = () => {
               <td>{file.status}</td>
               <td>{file.userinfo}</td>
               <td>{convertTimeFormat(file.uploaddate)}  (LT)</td>
-              <td>
+              <td className="action-icon-group usa-prose">
   <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDownload(file.id)} title="Download File">
     <FontAwesomeIcon icon={faDownload} />
   </button>
-  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file.id)} title="Delete File">
+  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file)} title="Delete File">
     <FontAwesomeIcon icon={faTrash} />
   </button>
   <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handlePushData(file.id)} title="Push Data">

@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useFileStatusStore } from "../../stores/FileStatusStore";
-import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../../constants";
+import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST, DELETE_FILE_URL } from "../../constants";
 import { useAuthStore } from "../../stores/authStore";
 import { convertTimeFormat } from "../../utility/Utility";
+import { useConfirmation } from "../common/BooleanConfirmationHook";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/FileUploadStatus.css';
+import { FileStatus } from "../../models/FileStatus";
 
 const UserUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
-
+  const { confirm, Confirmation } = useConfirmation();
   const [sortField, setSortField] = useState<string>("uploaddate");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filters, setFilters] = useState({
@@ -35,10 +40,57 @@ const UserUploadStatus: React.FC = () => {
     window.open(`${DOWNLOAD_URL}?fileId=${fileId}`, '_blank');
   };
 
+  const handleDelete = async (file: FileStatus) => {
+    
+    const confirmed = await confirm({
+      title: "Confirm File Deletion",
+      description: `Are you sure you want to delete file "${file.filename}"?`,
+      confirmLabel: "Yes, delete",
+      cancelLabel: "Cancel"
+    });
+
+    if (!confirmed) return;
+  
+    try {
+      const response = await fetch(`${DELETE_FILE_URL}/${file.id}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        const error = await confirm({
+          title: "File Deletion Failed",
+          description: `Failed to delete file "${file.filename}". Please try again later.`,
+          confirmLabel: "Ok"
+        });
+        return;
+      }
+  
+      const fileDeletedConfirmed = await confirm({
+        title: "File Deleted Successfully",
+        description: `File "${file.filename}" has been deleted successfully.`,
+        confirmLabel: "Ok",
+        cancelLabel: ""
+      });
+      fetchFiles(filters, sortField, sortOrder); // Refresh list
+    } catch (error) {
+      const errorConfirm = await confirm({
+        title: "File Deletion Failed",
+        description: `Failed to delete file "${file.filename}". Error: ${error}`,
+        confirmLabel: "Ok"
+      })
+    };
+  }
+  
+  const handleComment = (fileId: string) => {
+    console.log("Comment on", fileId);
+    // Implement comment logic
+  };
+
   return (
     <div className="grid-container usa-prose">
       <h2>Upload Status Dashboard</h2>
 
+      {Confirmation}
       <div className="form-row-inline">
         <div className="form-group">
           <label htmlFor="year-select" className="form-label">Year:</label>
@@ -104,8 +156,16 @@ const UserUploadStatus: React.FC = () => {
               <td>{file.status}</td>
               <td>{file.userinfo}</td>
               <td>{convertTimeFormat(file.uploaddate)} (LT)</td>
-              <td>
-                <button onClick={() => handleDownload(file.id)}>Download</button>
+              <td className="action-icon-group usa-prose">
+                <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDownload(file.id)} title="Download File">
+                  <FontAwesomeIcon icon={faDownload} />
+                </button>
+                <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file)} title="Delete File">
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+                <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
+                  <FontAwesomeIcon icon={faCommentDots} />
+                </button>
               </td>
             </tr>
           ))}
