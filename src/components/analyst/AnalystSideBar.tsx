@@ -1,11 +1,11 @@
 import React from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
-import SidebarHeader from "../common/SidebarHeader"; // Assuming you have a SidebarHeader component
 import "/node_modules/@uswds/uswds/dist/css/uswds.min.css";
 import "../../../css/Sidebar.css"; // Custom styles for sidebar
+import SidebarHeader from "../common/SidebarHeader";
 
-const AdminSideBar: React.FC = () => {
+const AnalystSideBar: React.FC = () => {
   const { userLogin, userrole, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,19 +23,17 @@ const AdminSideBar: React.FC = () => {
 
       {/* Navigation Links without <ul> or <li> */}
       <div className="usa-sidenav-list">
-        <NavLink to="/admin/upload" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        <NavLink to="/analyst/upload" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           File Upload
         </NavLink>
 
-        <NavLink to="/admin/status" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        <NavLink to="/analyst/status" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           Dashboard
         </NavLink>
 
-        <NavLink to="/admin/users" className={({ isActive }) => (isActive ? "usa-current" : "")}>
-          Users
-        </NavLink>
+      
 
-        <NavLink to="/admin/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        <NavLink to="/analyst/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           Profile
         </NavLink>
 
@@ -50,4 +48,4 @@ const AdminSideBar: React.FC = () => {
   );
 };
 
-export default AdminSideBar;
+export default AnalystSideBar;

@@ -1,11 +1,12 @@
 import React from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
+import SidebarHeader from "../common/SidebarHeader"; // Assuming you have a SidebarHeader component
 import "/node_modules/@uswds/uswds/dist/css/uswds.min.css";
 import "../../../css/Sidebar.css"; // Custom styles for sidebar
 
 const UserSideBar: React.FC = () => {
-  const { userLogin, logout } = useAuthStore();
+  const { userLogin, userrole, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -18,9 +19,7 @@ const UserSideBar: React.FC = () => {
   return (
     <nav className="usa-sidenav sidebar">
       {/* User Info Section */}
-      <div className="sidebar-header">
-        <p className="usa-text-bold">Welcome, {userLogin || "Please login"}</p>
-      </div>
+      <SidebarHeader userLogin={`${userLogin}`} userRole={userrole}/>
 
       {/* Navigation Links without <ul> or <li> */}
       <div className="usa-sidenav-list">

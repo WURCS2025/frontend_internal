@@ -9,6 +9,12 @@ export const convertTimeFormat = (date: string): string => {
   })
 };
 
+export const capitalizeFirstLetterSafe = (word: string | null): string => {
+  if (!word) return "";
+  return word.trim().charAt(0).toUpperCase() + word.trim().slice(1);
+}
+
+
 export const toBoolean = (value: string | null | undefined): boolean => {
   return value?.toLowerCase() === "true";
 };

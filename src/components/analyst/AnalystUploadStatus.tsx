@@ -11,7 +11,7 @@ import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/f
 
 import '../../../css/FileUploadStatus.css';
 
-const AdminUploadStatus: React.FC = () => {
+const AnalystUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
   const { confirm, Confirmation } = useConfirmation();
@@ -110,11 +110,8 @@ const handleDelete = async (file: FileStatus) => {
   };
 
   return (
-    // I need move the left padding to the top of the table
-    
-    <div className="admin-upload-wrapper margin-top-4 text-left" style={{ paddingLeft: "20px" }}>
     <div className="grid-container usa-prose">
-      <h2>Admin Upload Status Dashboard</h2>
+      <h2>Analyst Upload Status Dashboard</h2>
 
       {Confirmation}
       <div className="form-row-inline">
@@ -217,9 +214,8 @@ const handleDelete = async (file: FileStatus) => {
           ))}
         </tbody>
       </table>
-        </div>
     </div>
-  )
+  );
 };
 
-export default AdminUploadStatus;
+export default AnalystUploadStatus;
