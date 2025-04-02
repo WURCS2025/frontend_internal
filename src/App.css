@@ -54,6 +54,13 @@
   z-index: 1000;
 }
 
+.shared-width {
+  width: 100%;
+  max-width: 1280px; /* or 1040px depending on your USWDS grid size */
+  margin: 0 auto;
+}
+
+
 .session-warning {
   background: #fff;
   padding: 20px;
