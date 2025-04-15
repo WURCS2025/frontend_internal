@@ -7,12 +7,13 @@ import { USER_LIST_URL, DELETE_FILE_URL } from "../../constants";
 import { useConfirmation } from "../common/BooleanConfirmationHook";
 import { FileStatus } from "../../models/FileStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { handlePushDataCommon } from "../common/handlePushDataCommon";
 import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 
 import '../../../css/FileUploadStatus.css';
 
 const AdminUploadStatus: React.FC = () => {
-  const { files, fetchFiles } = useFileStatusStore();
+  const { files, fetchFiles, setFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
   const { confirm, Confirmation } = useConfirmation();
   const [userList, setUserList] = useState<{ id: string, username: string }[]>([]);
@@ -99,9 +100,8 @@ const handleDelete = async (file: FileStatus) => {
     }
   };
   
-  const handlePushData = (fileId: string) => {
-    console.log("Push data for", fileId);
-    // Implement push logic
+  const handlePushData = async (fileId: string) => {
+    handlePushDataCommon({ fileId, files, setFiles, confirm });
   };
   
   const handleComment = (fileId: string) => {
@@ -206,7 +206,8 @@ const handleDelete = async (file: FileStatus) => {
   <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file)} title="Delete File">
     <FontAwesomeIcon icon={faTrash} />
   </button>
-  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handlePushData(file.id)} title="Push Data">
+  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handlePushData(file.id)} title="Push Data"
+          disabled={file.status !== STATUS_OPTIONS_LIST[1]}>
     <FontAwesomeIcon icon={faPaperPlane} />
   </button>
   <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">

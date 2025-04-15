@@ -5,10 +5,13 @@ import { FILE_STATUS_URL } from "../constants";
 interface FileStatusState {
   files: FileStatus[];
   fetchFiles: (filters: any, sortField: string, sortOrder: string) => Promise<void>;
+  setFiles: (updatedFiles: FileStatus[]) => void;
 }
 
 export const useFileStatusStore = create<FileStatusState>((set) => ({
   files: [],
+
+  setFiles: (updatedFiles) => set({ files: updatedFiles }),
 
   fetchFiles: async (filters, sortField, sortOrder) => {
     try {

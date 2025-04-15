@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useFileStatusStore } from "../../stores/FileStatusStore";
-import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../../constants";
+import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST, SSE_FILE_URL } from "../../constants";
 import { useAuthStore } from "../../stores/authStore";
 import { convertTimeFormat } from "../../utility/Utility";
-import { USER_LIST_URL, DELETE_FILE_URL } from "../../constants";
+import { USER_LIST_URL, DELETE_FILE_URL, PUSH_DATA_URL } from "../../constants";
 import { useConfirmation } from "../common/BooleanConfirmationHook";
 import { FileStatus } from "../../models/FileStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import { handlePushDataCommon } from "../common/handlePushDataCommon";
 
 import '../../../css/FileUploadStatus.css';
+import { useSseMessages } from "../common/useSseMessages";
 
 const AnalystUploadStatus: React.FC = () => {
-  const { files, fetchFiles } = useFileStatusStore();
+  const { files, fetchFiles, setFiles } = useFileStatusStore();
   const { userLogin } = useAuthStore();
   const { confirm, Confirmation } = useConfirmation();
   const [userList, setUserList] = useState<{ id: string, username: string }[]>([]);
@@ -26,9 +28,22 @@ const AnalystUploadStatus: React.FC = () => {
     status: "",
   });
 
+  const sseMessages = useSseMessages(`${SSE_FILE_URL}`);
+
   useEffect(() => {
     fetchFiles({ userid: 'admin' }, sortField, sortOrder);
   }, []);
+
+  useEffect(() => {
+    fetchFiles({ userid: 'admin' }, sortField, sortOrder);
+  }, [sseMessages]);
+
+  useEffect(() => {
+    if (files.length) {
+      console.log("Files updated!", files);
+      // You can trigger side-effects here, like filtering, analytics, etc.
+    }
+  }, [files]); 
 
   useEffect(() => {
     fetchFiles(filters, sortField, sortOrder);
@@ -49,6 +64,8 @@ const AnalystUploadStatus: React.FC = () => {
     fetchUsers();
   }, []);
 
+ 
+  
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
@@ -99,9 +116,46 @@ const handleDelete = async (file: FileStatus) => {
     }
   };
   
-  const handlePushData = (fileId: string) => {
-    console.log("Push data for", fileId);
-    // Implement push logic
+  // const handlePushData = async (fileId: string) => {
+  //   // Implement push logic
+  //   console.log("Push data for", fileId);
+  //   const file = files.find((f) => f.id === fileId);
+  //   if (!file) {
+  //     console.error("File not found");
+  //     return;
+  //   }
+    
+     
+    
+  //   try {
+  //     const response = await fetch(`${PUSH_DATA_URL}`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(fileId),
+  //     });
+    
+  //     if (!response.ok) {
+  //       console.error("Failed to push message to SNS");
+  //     } else {
+  //       console.log("Message sent to SNS");
+  //       const returnFile: FileStatus = await response.json();
+  //       console.log("Response from SNS:", returnFile);
+  //       await confirm({
+  //         title: "Message Sent Successfully",
+  //         description: `${returnFile.filename} was sent to data processing successfully.`,
+  //       });
+  //       file.status = STATUS_OPTIONS_LIST[2];
+  //       setFiles([...files]);
+  //     }
+  //   } catch (error) {
+  //       console.error("Error sending message to SNS:", error);
+  //     }
+  //   };
+    
+  const handlePushData = async (fileId: string) => {
+    handlePushDataCommon({ fileId, files, setFiles, confirm });
   };
   
   const handleComment = (fileId: string) => {
@@ -182,8 +236,9 @@ const handleDelete = async (file: FileStatus) => {
             <th>Category</th>
             <th>Status</th>
             <th>User Info</th>
-            <th>Upload Date</th>
-            <th>Actions</th>
+            <th>Upload Date</th>  
+            <th>Actions</th>                      
+            <th>Live Message</th>
           </tr>
         </thead>
         <tbody>
@@ -196,6 +251,7 @@ const handleDelete = async (file: FileStatus) => {
               <td>{file.status}</td>
               <td>{file.userinfo}</td>
               <td>{convertTimeFormat(file.uploaddate)}  (LT)</td>
+              
               <td className="action-icon-group usa-prose">
   <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDownload(file.id)} title="Download File">
     <FontAwesomeIcon icon={faDownload} />
@@ -203,13 +259,22 @@ const handleDelete = async (file: FileStatus) => {
   <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file)} title="Delete File">
     <FontAwesomeIcon icon={faTrash} />
   </button>
-  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handlePushData(file.id)} title="Push Data">
+  <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handlePushData(file.id)} title="Push Data"
+          disabled={file.status !== STATUS_OPTIONS_LIST[1]}>
     <FontAwesomeIcon icon={faPaperPlane} />
   </button>
   <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
     <FontAwesomeIcon icon={faCommentDots} />
   </button>
-</td>
+              </td>
+              <td>
+              {
+                (() => {
+                  const match = sseMessages.find(m => m.id === file.id);
+                  return match ? `${match.result} - ${match.message}` : "";
+                })()
+  }
+            </td>
             </tr>
           ))}
         </tbody>

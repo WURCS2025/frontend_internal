@@ -116,7 +116,9 @@ const UserUpload: React.FC = () => {
         setUploadStatus("✅ File uploaded successfully!");
         resetForm(); // Reset form after successful upload
       } else {
-        setUploadStatus("❌ Failed to upload file. Please try again.");
+        console.error("Upload failed:", response);
+        console.error("Upload failed:", response.statusText);
+        setUploadStatus(`❌ Failed to upload file. Please try again.${response.statusText}`);
       }
     } catch (error) {
       console.error("Error uploading file:", error);

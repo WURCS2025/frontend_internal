@@ -160,7 +160,8 @@ const UserUploadStatus: React.FC = () => {
                 <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDownload(file.id)} title="Download File">
                   <FontAwesomeIcon icon={faDownload} />
                 </button>
-                <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file)} title="Delete File">
+                <button className="usa-button usa-button--unstyled margin-right-1" onClick={() => handleDelete(file)} title="Delete File"
+                disabled={file.status !== STATUS_OPTIONS_LIST[1]}>
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
                 <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
