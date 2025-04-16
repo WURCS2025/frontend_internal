@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useFileStatusStore } from "../../stores/FileStatusStore";
-import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST, DELETE_FILE_URL } from "../../constants";
+import { DOWNLOAD_URL, SSE_FILE_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST, DELETE_FILE_URL } from "../../constants";
 import { useAuthStore } from "../../stores/authStore";
 import { convertTimeFormat } from "../../utility/Utility";
 import { useConfirmation } from "../common/BooleanConfirmationHook";
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import '../../../css/FileUploadStatus.css';
 import { FileStatus } from "../../models/FileStatus";
+import { useSseMessages } from "../common/useSseMessages";
 
 const UserUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
@@ -24,9 +25,17 @@ const UserUploadStatus: React.FC = () => {
     status: "",
   });
 
+  const sseMessages = useSseMessages(`${SSE_FILE_URL}`);
+
   useEffect(() => {
     fetchFiles({ userid: userLogin }, sortField, sortOrder);
   }, []);
+
+  useEffect(() => {
+    if (sseMessages) {
+      fetchFiles({ ...filters, userid: userLogin }, sortField, sortOrder); // Refresh list on new SSE messages
+    }
+  }, [sseMessages]);
 
   useEffect(() => {
     fetchFiles(filters, sortField, sortOrder);
@@ -144,6 +153,7 @@ const UserUploadStatus: React.FC = () => {
             <th>User Info</th>
             <th>Upload Date</th>
             <th>Actions</th>
+            <th>Live Message</th>
           </tr>
         </thead>
         <tbody>
@@ -168,6 +178,14 @@ const UserUploadStatus: React.FC = () => {
                   <FontAwesomeIcon icon={faCommentDots} />
                 </button>
               </td>
+              <td>
+              {
+                (() => {
+                  const match = sseMessages.find(m => m.id === file.id);
+                  return match ? `${match.result} - ${match.message}` : "";
+                })()
+  }
+            </td>
             </tr>
           ))}
         </tbody>

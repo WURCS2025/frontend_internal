@@ -3,13 +3,14 @@ import { useFileStatusStore } from "../../stores/FileStatusStore";
 import { DOWNLOAD_URL, TYPE_OPTIONS_LIST, YEAR_OPTIONS_LIST, CATEGORY_OPTIONS_LIST, STATUS_OPTIONS_LIST } from "../../constants";
 import { useAuthStore } from "../../stores/authStore";
 import { convertTimeFormat } from "../../utility/Utility";
-import { USER_LIST_URL, DELETE_FILE_URL } from "../../constants";
+import { USER_LIST_URL, DELETE_FILE_URL, SSE_FILE_URL } from "../../constants";
 import { useConfirmation } from "../common/BooleanConfirmationHook";
 import { FileStatus } from "../../models/FileStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { handlePushDataCommon } from "../common/handlePushDataCommon";
 import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/free-solid-svg-icons";
-
+import { useSseMessages } from "../common/useSseMessages";
+import { fetchUsers } from "../common/FetchUserList"; // Adjust the import path as necessary
 import '../../../css/FileUploadStatus.css';
 
 const AdminUploadStatus: React.FC = () => {
@@ -27,28 +28,32 @@ const AdminUploadStatus: React.FC = () => {
     status: "",
   });
 
+  const sseMessages = useSseMessages(`${SSE_FILE_URL}`);
+
   useEffect(() => {
     fetchFiles({ userid: 'admin' }, sortField, sortOrder);
   }, []);
 
   useEffect(() => {
-    fetchFiles(filters, sortField, sortOrder);
-  }, [userLogin, filters, sortField, sortOrder]);
+    if (sseMessages) {
+      fetchFiles({ ...filters, userid: userLogin }, sortField, sortOrder); // Refresh list on new SSE messages
+    }
+  }, [sseMessages, userLogin, filters, sortField, sortOrder]);
+
+
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${USER_LIST_URL}/userlist?username=${localStorage.getItem("user")}`); // Replace with your actual API route
-        console.log("fetchUsers response:", response);
-        const data = await response.json();
-        setUserList(data); // Assuming the data is an array of { id, name }
-      } catch (error) {
-        console.error("Failed to fetch users", error);
-      }
-    };
+    const username = localStorage.getItem("user") || "";
+    console.log("Fetched username from localStorage:", username);
   
-    fetchUsers();
+    fetchUsers(username)
+      .then(data => {
+        console.log("Fetched users:", data);
+        setUserList(data);
+      })
+      .catch(err => console.error("Failed to fetch users", err));
   }, []);
+  
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -187,6 +192,7 @@ const handleDelete = async (file: FileStatus) => {
             <th>User Info</th>
             <th>Upload Date</th>
             <th>Actions</th>
+            <th>Live Messages</th>
           </tr>
         </thead>
         <tbody>
@@ -214,6 +220,14 @@ const handleDelete = async (file: FileStatus) => {
     <FontAwesomeIcon icon={faCommentDots} />
   </button>
 </td>
+<td>
+              {
+                (() => {
+                  const match = sseMessages.find(m => m.id === file.id);
+                  return match ? `${match.result} - ${match.message}` : "";
+                })()
+  }
+            </td>
             </tr>
           ))}
         </tbody>

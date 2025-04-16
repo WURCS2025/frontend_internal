@@ -116,44 +116,6 @@ const handleDelete = async (file: FileStatus) => {
     }
   };
   
-  // const handlePushData = async (fileId: string) => {
-  //   // Implement push logic
-  //   console.log("Push data for", fileId);
-  //   const file = files.find((f) => f.id === fileId);
-  //   if (!file) {
-  //     console.error("File not found");
-  //     return;
-  //   }
-    
-     
-    
-  //   try {
-  //     const response = await fetch(`${PUSH_DATA_URL}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(fileId),
-  //     });
-    
-  //     if (!response.ok) {
-  //       console.error("Failed to push message to SNS");
-  //     } else {
-  //       console.log("Message sent to SNS");
-  //       const returnFile: FileStatus = await response.json();
-  //       console.log("Response from SNS:", returnFile);
-  //       await confirm({
-  //         title: "Message Sent Successfully",
-  //         description: `${returnFile.filename} was sent to data processing successfully.`,
-  //       });
-  //       file.status = STATUS_OPTIONS_LIST[2];
-  //       setFiles([...files]);
-  //     }
-  //   } catch (error) {
-  //       console.error("Error sending message to SNS:", error);
-  //     }
-  //   };
-    
   const handlePushData = async (fileId: string) => {
     handlePushDataCommon({ fileId, files, setFiles, confirm });
   };
