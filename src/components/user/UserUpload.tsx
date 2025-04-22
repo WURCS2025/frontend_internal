@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 import { UPLOAD_URL } from "../../constants";
 import { TYPE_OPTIONS, YEAR_OPTIONS, CATEGORY_OPTIONS } from "../../constants";
+import ScanFile  from "../common/ScanFile"; // Import ScanFile component
 
 const UserUpload: React.FC = () => {
   const { file, type, year, category, user, setFile, setType, setYear, setCategory, setUser } = useUploadStore();
@@ -11,6 +12,10 @@ const UserUpload: React.FC = () => {
   const [dragActive, setDragActive] = useState(false);
   const [fileName, setFileName] = useState<string>("No file selected"); // ✅ Store file name
   const fileInputRef = useRef<HTMLInputElement>(null); // Reference to trigger file input
+  const [scanTriggered, setScanTriggered] = useState(false);
+  const [scanPassed, setScanPassed] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [scanMessage, setScanMessage] = useState<string | null>(null);
   
   const uploadurl = `${UPLOAD_URL}`; // Use the constant for the upload URL
 
@@ -75,6 +80,8 @@ const UserUpload: React.FC = () => {
     setFileName("No file selected");
   };
 
+
+  
   // 📌 Handle File Upload
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -96,6 +103,29 @@ const UserUpload: React.FC = () => {
       setUploadStatus("❌ Please select a category.");
       return;
     }
+
+    setScanTriggered(true);
+    setUploadStatus("🔍 Scanning file for viruses...");
+
+  }
+
+  const handleScanResult = async ({ clean, message }: { clean: boolean; message: string }) => {
+    setScanMessage(message);
+    setScanTriggered(false);
+  
+    if (!clean) {
+      setUploadStatus(`❌ File failed virus scan. ${message}`);
+      setScanPassed(false);
+      return;
+    }
+  
+    if (!file) {
+      setUploadStatus("❌ Please select a file to upload.");
+      return;
+    }
+
+    setScanPassed(true);
+    
 
     const formData = new FormData();
     formData.append("file", file);
@@ -134,6 +164,22 @@ const UserUpload: React.FC = () => {
           <p>{uploadStatus}</p>
         </div>
       )}
+
+{file && (
+  <>
+    <ScanFile
+      file={file}
+      triggerScan={scanTriggered}
+      onResult={handleScanResult}
+      onScanning={setScanning}
+    />
+    {scanMessage && (
+      <div style={{ marginTop: "0.5rem", fontWeight: "bold" }}>
+        {scanMessage}
+      </div>
+    )}
+  </>
+)}
 
       <form className="usa-form" onSubmit={handleSubmit}>
         {/* 📌 USWDS Styled Drag & Drop File Input with File Name Display */}

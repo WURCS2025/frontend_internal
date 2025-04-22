@@ -34,9 +34,7 @@ const AnalystUploadStatus: React.FC = () => {
     fetchFiles({ userid: 'admin' }, sortField, sortOrder);
   }, []);
 
-  useEffect(() => {
-    fetchFiles({ userid: 'admin' }, sortField, sortOrder);
-  }, [sseMessages]);
+ 
 
   useEffect(() => {
     if (files.length) {
@@ -47,7 +45,7 @@ const AnalystUploadStatus: React.FC = () => {
 
   useEffect(() => {
     fetchFiles(filters, sortField, sortOrder);
-  }, [userLogin, filters, sortField, sortOrder]);
+  }, [sseMessages, userLogin, filters, sortField, sortOrder]);
 
   useEffect(() => {
     const fetchUsers = async () => {
