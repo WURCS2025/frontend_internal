@@ -15,7 +15,9 @@ const UserUpload: React.FC = () => {
   const [scanTriggered, setScanTriggered] = useState(false);
   const [scanPassed, setScanPassed] = useState(false);
   const [scanning, setScanning] = useState(false);
+  const [scanResetKey, setScanResetKey] = useState(0);
   const [scanMessage, setScanMessage] = useState<string | null>(null);
+
   
   const uploadurl = `${UPLOAD_URL}`; // Use the constant for the upload URL
 
@@ -46,6 +48,7 @@ const UserUpload: React.FC = () => {
       setFile(selectedFile);
       setFileName(selectedFile.name); // ✅ Update file name
       setUploadStatus("");
+      setScanMessage(null)
     }
   };
 
@@ -72,12 +75,15 @@ const UserUpload: React.FC = () => {
       setFile(droppedFile);
       setFileName(droppedFile.name); // ✅ Update file name
       setUploadStatus("");
+      setScanMessage(null); // Reset scan message on new file drop
+      
     }
   };
 
   const resetForm = () => {
     setFile(null);
     setFileName("No file selected");
+    setScanMessage(null)
   };
 
 

@@ -10,6 +10,7 @@ interface ScanFileProps {
 
 const ScanFile: React.FC<ScanFileProps> = ({ file, triggerScan, onResult, onScanning }) => {
   const [progress, setProgress] = useState<number>(0);
+  const [showProgress, setShowProgress] = useState<boolean>(false);
 
   useEffect(() => {
     if (triggerScan && file) {
@@ -17,6 +18,12 @@ const ScanFile: React.FC<ScanFileProps> = ({ file, triggerScan, onResult, onScan
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerScan]);
+
+  useEffect(() => {
+    // Reset when file changes
+    setProgress(0);
+    setShowProgress(false);
+  }, [file]);
 
   const estimateScanTime = (fileSize: number) => {
     const sizeMB = fileSize / (1024 * 1024);
@@ -37,6 +44,7 @@ const ScanFile: React.FC<ScanFileProps> = ({ file, triggerScan, onResult, onScan
 
   const runScan = async () => {
     setProgress(0);
+    setShowProgress(true);
     onScanning(true);
     simulateProgress(estimateScanTime(file.size));
 
@@ -60,7 +68,10 @@ const ScanFile: React.FC<ScanFileProps> = ({ file, triggerScan, onResult, onScan
       });
     }
     onScanning(false);
+    setShowProgress(false);
   };
+
+  if (!showProgress) return null;
 
   return (
     <div style={{ marginTop: "0.5rem" }}>
