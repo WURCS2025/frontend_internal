@@ -120,6 +120,7 @@ const UserUpload: React.FC = () => {
     setScanTriggered(false);
   
     if (!clean) {
+      setScanMessage(`⚠️ Please select a different file.`);
       setUploadStatus(`❌ File failed virus scan. ${message}`);
       setScanPassed(false);
       return;
@@ -129,6 +130,10 @@ const UserUpload: React.FC = () => {
       setUploadStatus("❌ Please select a file to upload.");
       return;
     }
+
+    setUploadStatus("✅ File passed virus scan. Uploading...");
+    await new Promise(resolve => setTimeout(resolve, 3000)); // Simulate a delay for the scan result
+    
 
     setScanPassed(true);
     
@@ -225,7 +230,7 @@ const UserUpload: React.FC = () => {
 
         {/* 📌 File Type */}
         <label className="usa-label" htmlFor="type">File Type:</label>
-        <select className="usa-select" id="type" value={type} onChange={(e) => setType(e.target.value)} required>
+        <select className="usa-select" id="type" value={type} onChange={(e) => setType(e.target.value)} >
           <option value="">Select Type</option>
           {TYPE_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>{opt}</option>
@@ -234,7 +239,7 @@ const UserUpload: React.FC = () => {
 
         {/* 📌 Year Selection */}
         <label className="usa-label" htmlFor="year">Year:</label>
-        <select className="usa-select" id="year" value={year} onChange={(e) => setYear(e.target.value)} required>
+        <select className="usa-select" id="year" value={year} onChange={(e) => setYear(e.target.value)}>
           <option value="">Select Year</option>
           {YEAR_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>{opt}</option>
@@ -243,7 +248,7 @@ const UserUpload: React.FC = () => {
 
         {/* 📌 Category Selection */}
         <label className="usa-label" htmlFor="category">Category:</label>
-        <select className="usa-select" id="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
+        <select className="usa-select" id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">Select Category</option>
           {CATEGORY_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>{opt}</option>
