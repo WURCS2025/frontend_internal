@@ -22,6 +22,7 @@ const AdminUploadStatus: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filters, setFilters] = useState({
     userid: userLogin || "",
+    byuser: "",
     year: "",
     category: "",
     filetype: "",
@@ -31,13 +32,14 @@ const AdminUploadStatus: React.FC = () => {
   const sseMessages = useSseMessages(`${SSE_FILE_URL}`);
 
   useEffect(() => {
-    fetchFiles({ userid: 'admin' }, sortField, sortOrder);
+    fetchFiles(filters, sortField, sortOrder);
   }, []);
 
   useEffect(() => {
-    if (sseMessages) {
-      fetchFiles({ ...filters, userid: userLogin }, sortField, sortOrder); // Refresh list on new SSE messages
-    }
+    // if (sseMessages) {
+      console.log("Current filters at fetch:", filters);
+      fetchFiles(filters, sortField, sortOrder); // Refresh list on new SSE messages
+    // }
   }, [sseMessages, userLogin, filters, sortField, sortOrder]);
 
 
@@ -127,10 +129,10 @@ const handleDelete = async (file: FileStatus) => {
           <label htmlFor="user-select" className="form-label">User:</label>
           <select
             id="user-select"
-            name="userid"
+            name="byuser"
             onChange={handleFilterChange}
             className="form-select"
-            value={filters.userid}
+            value={filters.byuser}
           >
             <option value="">All</option>
             {userList.map((user) => (

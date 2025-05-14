@@ -33,9 +33,7 @@ const AnalystSideBar: React.FC = () => {
 
       
 
-        <NavLink to="/analyst/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
-          Profile
-        </NavLink>
+
 
         <button
           className="usa-button usa-button--secondary logout-button"

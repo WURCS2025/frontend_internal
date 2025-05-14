@@ -2,7 +2,7 @@ export interface FileStatus {
   id: string;
   filename: string;
   userinfo: string;
-  type: string;
+  filetype: string;
   fileMetaData: string;
   year: number;
   category: string;

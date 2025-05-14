@@ -18,26 +18,30 @@ export const useFileStatusStore = create<FileStatusState>((set) => ({
       var body = JSON.stringify({
         userid: filters.userid,
         category: filters.category,
+        byuser: filters.byuser,
         year: filters.year,
         type: filters.type,
         status: filters.status,
         sortField: sortField || 'uploaddate',
         sortOrder: sortOrder || 'desc', // Default to 'desc' if not provided
       });
+      console.log("Request body at fileStatusStore:", body);
+      console.log("Request filters at fileStatusStore:", filters);
       const response = await fetch(`${FILE_STATUS_URL}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          userid: filters.userid,
-          category: filters.category,
-          year: filters.year,
-          filetype: filters.filetype,
-          status: filters.status,
-          sortField,
-          sortOrder,
-        }),
+        body: body,
+        // body: JSON.stringify({
+        //   userid: filters.userid,
+        //   category: filters.category,
+        //   year: filters.year,
+        //   filetype: filters.filetype,
+        //   status: filters.status,
+        //   sortField,
+        //   sortOrder,
+        // }),
       });
 
       if (!response.ok) {

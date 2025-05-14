@@ -35,9 +35,9 @@ const AdminSideBar: React.FC = () => {
           Users
         </NavLink>
 
-        <NavLink to="/admin/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        {/* <NavLink to="/admin/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           Profile
-        </NavLink>
+        </NavLink> */}
 
         <button
           className="usa-button usa-button--secondary logout-button"

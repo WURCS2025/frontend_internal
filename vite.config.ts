@@ -10,4 +10,7 @@ export default defineConfig({
     environment: "jsdom", // ✅ Simulates the browser for React tests
     exclude: [...configDefaults.exclude, "node_modules/**"],
   },
+  build: {
+    outDir: 'dist' // Should be relative to project root, NOT inside src/
+  }
 });

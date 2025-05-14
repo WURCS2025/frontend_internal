@@ -31,9 +31,9 @@ const UserSideBar: React.FC = () => {
           Dashboard
         </NavLink>
 
-        <NavLink to="/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
+        {/* <NavLink to="/profile" className={({ isActive }) => (isActive ? "usa-current" : "")}>
           Profile
-        </NavLink>
+        </NavLink> */}
 
         <button
           className="usa-button usa-button--secondary logout-button"

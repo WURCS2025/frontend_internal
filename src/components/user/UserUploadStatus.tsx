@@ -10,6 +10,7 @@ import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/f
 import '../../../css/FileUploadStatus.css';
 import { FileStatus } from "../../models/FileStatus";
 import { useSseMessages } from "../common/useSseMessages";
+import { b } from "vitest/dist/chunks/suite.qtkXWc6R.js";
 
 const UserUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
@@ -19,6 +20,7 @@ const UserUploadStatus: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filters, setFilters] = useState({
     userid: userLogin || "",
+    byuser: userLogin || "",
     year: "",
     category: "",
     filetype: "",
@@ -150,7 +152,8 @@ const UserUploadStatus: React.FC = () => {
             <th>Year</th>
             <th>Category</th>
             <th>Status</th>
-            <th>User Info</th>
+            <th>File Type</th>
+            <th>User</th>
             <th>Upload Date</th>
             <th>Actions</th>
             <th>Live Message</th>
@@ -164,6 +167,7 @@ const UserUploadStatus: React.FC = () => {
               <td>{file.year}</td>
               <td>{file.category}</td>
               <td>{file.status}</td>
+              <td>{file.filetype}</td>
               <td>{file.userinfo}</td>
               <td>{convertTimeFormat(file.uploaddate)} (LT)</td>
               <td className="action-icon-group usa-prose">
@@ -174,7 +178,7 @@ const UserUploadStatus: React.FC = () => {
                 disabled={file.status !== STATUS_OPTIONS_LIST[1]}>
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
-                <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
+                <button className="usa-button usa-button--unstyled invisible-button" onClick={() => handleComment(file.id)} title="Add Comment" >
                   <FontAwesomeIcon icon={faCommentDots} />
                 </button>
               </td>

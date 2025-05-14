@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { USER_LIST_URL, ADD_USER_URL, DELETE_USER_URL } from "../../constants";
+import { USER_LIST_URL, ADD_USER_URL, DELETE_USER_URL, chgpwd_URL} from "../../constants";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { useConfirmation } from "../common/BooleanConfirmationHook";
 import ConfirmationModal from "../common/ConfirmationModal";
 
 interface User {
@@ -17,6 +18,7 @@ const AdminUserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const { confirm, Confirmation } = useConfirmation();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [passwordForm, setPasswordForm] = useState({ password: "", confirmPassword: "" });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -118,24 +120,40 @@ const AdminUserManagement: React.FC = () => {
     setShowPasswordModal(true);
   };
 
-  const handlePasswordUpdate = () => {
+  const handlePasswordUpdate = async () => {
     if (!selectedUser) return;
     if (passwordForm.password !== passwordForm.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    fetch(`/api/users/${selectedUser.id}/password`, {
-      method: "PUT",
+    fetch(`${chgpwd_URL}`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: passwordForm.password }),
+      body: JSON.stringify({
+        username: selectedUser.username,         // ensure this exists
+        newPwd: passwordForm.password,
+        confirmPwd: passwordForm.confirmPassword, // ensure your form has this field
+      }),
     })
       .then((res) => {
-        if (res.ok) alert("Password updated successfully");
-        else throw new Error("Failed to update password");
-        setShowPasswordModal(false);
+        if (res.ok) {
+          confirm({
+            title: "Password Updated",
+            description: `Password for user "${selectedUser.username}" has been updated successfully.`,
+            confirmLabel: "OK",
+          });
+          setShowPasswordModal(false);
+        } else {
+          return res.text().then((message) => {
+            throw new Error(message);
+          });
+        }
       })
-      .catch((error) => console.error("Error updating password:", error));
+      .catch((error) => {
+        console.error("Error updating password:", error);
+        alert(error.message);
+      });
   };
 
 
@@ -189,7 +207,7 @@ const AdminUserManagement: React.FC = () => {
           setUserToDelete(null);
         }}
 />
-
+{Confirmation}
       <ConfirmationModal
   isOpen={showDeleteModal}
   title="Confirm Deletion"

@@ -22,6 +22,7 @@ const AnalystUploadStatus: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filters, setFilters] = useState({
     userid: userLogin || "",
+    byuser: "",
     year: "",
     category: "",
     filetype: "",
@@ -31,7 +32,7 @@ const AnalystUploadStatus: React.FC = () => {
   const sseMessages = useSseMessages(`${SSE_FILE_URL}`);
 
   useEffect(() => {
-    fetchFiles({ userid: 'admin' }, sortField, sortOrder);
+    fetchFiles(filters, sortField, sortOrder);
   }, []);
 
  
@@ -133,10 +134,10 @@ const handleDelete = async (file: FileStatus) => {
           <label htmlFor="user-select" className="form-label">User:</label>
           <select
             id="user-select"
-            name="userid"
+            name="byuser"
             onChange={handleFilterChange}
             className="form-select"
-            value={filters.userid}
+            value={filters.byuser}
           >
             <option value="">All</option>
             {userList.map((user) => (
@@ -195,6 +196,7 @@ const handleDelete = async (file: FileStatus) => {
             <th>Year</th>
             <th>Category</th>
             <th>Status</th>
+            <th>File Type</th>
             <th>User Info</th>
             <th>Upload Date</th>  
             <th>Actions</th>                      
@@ -209,6 +211,7 @@ const handleDelete = async (file: FileStatus) => {
               <td>{file.year}</td>
               <td>{file.category}</td>
               <td>{file.status}</td>
+              <td>{file.filetype}</td>
               <td>{file.userinfo}</td>
               <td>{convertTimeFormat(file.uploaddate)}  (LT)</td>
               
