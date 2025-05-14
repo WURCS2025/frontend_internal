@@ -13,6 +13,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@uswds/uswds": "^3.11.0",
     "fast-glob": "^3.3.3",
     "react": "^19.0.0",
