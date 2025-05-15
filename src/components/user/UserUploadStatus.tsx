@@ -10,7 +10,6 @@ import { faDownload, faTrash, faPaperPlane, faCommentDots } from "@fortawesome/f
 import '../../../css/FileUploadStatus.css';
 import { FileStatus } from "../../models/FileStatus";
 import { useSseMessages } from "../common/useSseMessages";
-import { b } from "vitest/dist/chunks/suite.qtkXWc6R.js";
 
 const UserUploadStatus: React.FC = () => {
   const { files, fetchFiles } = useFileStatusStore();
