@@ -6,11 +6,16 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true, // ✅ Enables `describe`, `test`, and `expect`
-    setupFiles: "./tests/setupTests.ts", // ✅ Load Testing Library matchers
+    setupFiles: "./tests/setup.ts", // ✅ Load Testing Library matchers
     environment: "jsdom", // ✅ Simulates the browser for React tests
     exclude: [...configDefaults.exclude, "node_modules/**"],
+    include: ['**/*.test.tsx']  // basic default,
   },
   build: {
     outDir: 'dist' // Should be relative to project root, NOT inside src/
   }
 });
+
+
+
+
