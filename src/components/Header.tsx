@@ -24,8 +24,8 @@ const Header: React.FC = () => {
             <a href="https://www.stb.gov" title="Surface Transportation Board Home" className="header-link">STB Home</a>
             <a href="/help" title="support and help" className="header-link">Help</a>
             <a href="/faq" title="Frequently asked questions" className="header-link">FAQ</a>
-            <a href="/analyst/*" title="Analyst portal" className="header-link">Analyst</a>
-            <a href="/admin/*" title="Admin portal" className="header-link">Admin</a>
+            {/* <a href="/analyst/*" title="Analyst portal" className="header-link">Analyst</a> */}
+            {/* <a href="/admin/*" title="Admin portal" className="header-link">Admin</a> */}
           </nav>
         </div>
       </div>

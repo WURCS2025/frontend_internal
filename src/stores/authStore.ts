@@ -30,16 +30,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (!response.ok) return false;
 
-      // const data = await response.json();
-      const expiration = Date.now() + SESSION_LENGTH * 60 * 1000; // 30 minutes expiration
-      const data = {
-        token: password
-      }
+      const data = await response.json();
+      const expiration = Date.now() + SESSION_LENGTH * 30 * 1000; // 30 minutes expiration
+      
 
       set({ userLogin: username, token: data.token, expiration, userrole });
 
       localStorage.setItem("user", username);
-      localStorage.setItem("token", data.token);
+      // localStorage.setItem("token", data.token);
       localStorage.setItem("expiration", expiration.toString());
       localStorage.setItem("userrole", userrole);
 

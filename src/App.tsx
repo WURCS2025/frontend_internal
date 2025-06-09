@@ -13,13 +13,13 @@ const App: React.FC = () => {
         <Route path="/admin/*" element={<AdminRoutes />} />
 
         {/* User Routes */}
-        <Route path="/user/*" element={<UserRoutes />} />
+        {/* <Route path="/user/*" element={<UserRoutes />} /> */}
 
         {/* Analyst Routes */}
         <Route path="/analyst/*" element={<AnalystRoutes />} />
 
         {/* Default: Redirect to User Login */}
-        <Route path="*" element={<UserRoutes />} />
+        <Route path="*" element={<AnalystRoutes />} />
       </Routes>
     </Router>
   );
