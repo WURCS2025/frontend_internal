@@ -51,6 +51,15 @@
   background-color: darkred;
 }
 
+.narrow-container {
+  max-width: 240px;
+  margin-top: 2rem;       /* Add top margin */
+  margin-left: 0;         /* Align left */
+  margin-right: auto;     /* Prevent horizontal centering */
+  text-align: left;       /* Align text/button content left */
+}
+
+
 /* Adjust the main content area */
 .main-content {
   margin-left: 250px; /* Matches sidebar width */

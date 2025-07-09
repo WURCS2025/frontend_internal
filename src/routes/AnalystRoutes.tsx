@@ -1,6 +1,6 @@
 
 import { Routes, Route } from "react-router-dom";
-import UserUpload from "../components/user/UserUpload";
+import AnalystUpload from "../components/analyst/AnalystUpload";
 import { UserProfile } from "../components/user/UserProfile";
 import HelpComponent from "../components/common/HelpComponent";
 import AnalystLogin from "../components/analyst/AnalystLogin";
@@ -17,7 +17,7 @@ const UserRoutes = () => {
         <Route path="/login" element={<AnalystLogin />} />
         <Route element={<AnalystProtectedRoute/>}> 
           <Route path="/status" element={<AnalystUploadStatus />} />
-          <Route path="/upload" element={<UserUpload />} />
+          <Route path="/upload" element={<AnalystUpload />} />
           <Route path="/profile" element={<UserProfile />} />
         </Route>
         <Route path="*" element={<AnalystLogin />} />
