@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "tests/UploadForm.test.tsx", "tests/debug.test.ts"]
+  "include": ["src", "tests/UploadForm.test.tsx", "tests/debug.test.ts", "tests/UserLogin.test.tsx"]
 }

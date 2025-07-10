@@ -4,9 +4,12 @@ import { useAuthStore } from "../../stores/authStore";
 import "/node_modules/@uswds/uswds/dist/css/uswds.min.css";
 import "../../../css/Sidebar.css"; // Custom styles for sidebar
 import SidebarHeader from "../common/SidebarHeader";
+import { useAuth0 } from '@auth0/auth0-react';
+import type { LogoutOptions } from '@auth0/auth0-react';
 
 const AnalystSideBar: React.FC = () => {
-  const { userLogin, userrole, logout } = useAuthStore();
+  const { userLogin, userrole } = useAuthStore();
+  const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -31,16 +34,24 @@ const AnalystSideBar: React.FC = () => {
           Dashboard
         </NavLink>
 
+          <div>
       
+            {!isAuthenticated && <button className="usa-button usa-button--secondary logout-button" onClick={() => loginWithRedirect()}>Log In</button>}
+            {isAuthenticated && (
+              <>
+                <button className="usa-button usa-button--secondary logout-button" onClick={() => logout({ returnTo: window.location.origin +"/analyst/" } as LogoutOptions)}>Log Out</button>
+              </>
+            )}
+          </div>
 
 
 
-        <button
+        {/* <button
           className="usa-button usa-button--secondary logout-button"
           onClick={handleLogout}
         >
           {isLoginPage ? "Login" : "Logout"}
-        </button>
+        </button> */}
       </div>
     </nav>
   );

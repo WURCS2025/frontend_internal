@@ -226,9 +226,9 @@ const handleDelete = async (file: FileStatus) => {
           disabled={file.status !== STATUS_OPTIONS_LIST[1]}>
     <FontAwesomeIcon icon={faPaperPlane} />
   </button>
-  <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
+  {/* <button className="usa-button usa-button--unstyled" onClick={() => handleComment(file.id)} title="Add Comment">
     <FontAwesomeIcon icon={faCommentDots} />
-  </button>
+  </button> */}
               </td>
               <td>
               {
